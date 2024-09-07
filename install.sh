@@ -1,7 +1,7 @@
 
 
 
-$BASE=$PWD
+
 
 apt-get -y -qq update && apt-get -y upgrade
 
@@ -27,6 +27,7 @@ fi
 
 
 bladerf () {
+  echo "Configuring BladeRF \n"
   git clone https://github.com/Nuand/bladeRF.git
   cd bladeRF
   dpkg -s libusb-1.0-0 libusb-1.0-0-dev
@@ -37,7 +38,7 @@ bladerf () {
   sudo addgroup bladerf
   sudo usermod -a -G bladerf $USER
   make && sudo make install && sudo ldconfig
-  cd $BASE
+  cd $HOME
 }
 
 
@@ -68,7 +69,7 @@ YatesBTS_install () {
   sudo ldconfig
   cd ..
   sudo mkdir -p /usr/share/nuand/bladeRF
-  cd $BASE
+  cd $HOME
 }
 
 
@@ -78,22 +79,24 @@ YatesBTS_config () {
 
 ### Configs
 configs () {
+  echo "Configuring ... \n"
   touch /usr/local/etc/yate/snmp_data.conf /usr/local/etc/yate/tmsidata.conf
   sudo chown $USER:yate /usr/local/etc/yate/*.conf
   sudo chmod g+w /usr/local/etc/yate/*.conf
   bladeRF-cli -l /usr/src/Nuand/bladeRF/hostedxA9.rbf
   cp yate.service  /etc/systemd/system/yate.service
   cp config.php /usr/local/share/yate/nipc_web/config.php
-  cd $BASE
+  cd $HOME
 }
 
 ## NIB0x
 setup_b0x () {
+  echo "Setup B0x \n"
   sudo apt-get -qq install -y apache2 php libusb-1.0-0 libusb-1.0-0-d* libusb-1.0-0-dev libgsm1 libgsm1-dev
   cd /var/www/html
   sudo ln -s /usr/local/share/yate/nipc_web nipc
   sudo chmod -R a+w /usr/local/share/yate
-  cd $BASE
+  cd $HOME
 }
 
 
@@ -101,6 +104,7 @@ setup_b0x () {
 #wget https://raw.githubusercontent.com/Offensive-Wireless/Install-YateBTS-on-RPI4/main/yate.service
 
 restart_services () {
+  echo "Restarting Services... \n"
   sudo systemctl daemon-reload
   sudo systemctl start yate
   sudo systemctl enable yate
@@ -114,8 +118,8 @@ cp config.php /usr/local/share/yate/nipc_web/config.php
 
 ## SIM Cards
 sim_cards () {
+  echo "Installing PySIM \n"
   sudo apt-get install libpcsclite-dev
-  cd ~
   mkdir PySIM
   cd PySIM/
   git clone git://git.osmocom.org/pysim.git
@@ -125,7 +129,7 @@ sim_cards () {
   cd /usr/local/bin
   sudo ln -s /usr/src/pysim/pySim-prog.py pySim-prog.py
   sudo vi /usr/local/share/yate/nipc_web/config.php
-  cd $BASE
+  cd $HOME
 }
 
 
