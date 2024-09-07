@@ -2,30 +2,24 @@
 
 
 
-
-apt-get -y -qq update && apt-get -y upgrade
+echo "Updating Repos ...\n"
+apt-get -y -qq update 
+echo "Upgrading System...\n"
+apt-get -y -qq upgrade
 
 ##Base dependencies
 base_deps () {
   echo "Installing Dependencies..."
   sudo apt-get -qq install -y libusb-1.0-0-dev libusb-1.0-0 build-essential cmake libncurses5-dev libtecla1 libtecla-dev pkg-config git wget doxygen help2man pandoc python-setuptools swig libccid pcscd pcsc-tools libpcsclite1 unzip automake matchbox-keyboard iptables-persistent
   sudo apt -qq install -y libbladerf-dev libpcsclite-dev #python-pyscard
+  #box
+  sudo apt-get -qq install -y apache2 php libusb-1.0-0 libusb-1.0-0-d* libusb-1.0-0-dev libgsm1 libgsm1-dev
+  #SIM Cards
+  sudo apt-get install python3-pyscard python3-serial python3-pip python3-yaml
 }
-
-if ! command -v <the_command> &> /dev/null
-then
-    echo "<the_command> could not be found"
-    exit 1
-fi
-
-
-
-
 
 
 ## BladeRF
-
-
 bladerf () {
   echo "Configuring BladeRF \n"
   git clone https://github.com/Nuand/bladeRF.git
@@ -42,7 +36,7 @@ bladerf () {
 }
 
 
-
+# YatesBTS Install
 YatesBTS_install () {
   echo "Installing YateBTS..."
   sudo addgroup yate
@@ -72,13 +66,8 @@ YatesBTS_install () {
   cd $HOME
 }
 
-
-YatesBTS_config () {
-  commands
-}
-
 ### Configs
-configs () {
+YatesBTS_config () {
   echo "Configuring ... \n"
   touch /usr/local/etc/yate/snmp_data.conf /usr/local/etc/yate/tmsidata.conf
   sudo chown $USER:yate /usr/local/etc/yate/*.conf
@@ -92,7 +81,6 @@ configs () {
 ## NIB0x
 setup_b0x () {
   echo "Setup B0x \n"
-  sudo apt-get -qq install -y apache2 php libusb-1.0-0 libusb-1.0-0-d* libusb-1.0-0-dev libgsm1 libgsm1-dev
   cd /var/www/html
   sudo ln -s /usr/local/share/yate/nipc_web nipc
   sudo chmod -R a+w /usr/local/share/yate
@@ -104,10 +92,12 @@ setup_b0x () {
 #wget https://raw.githubusercontent.com/Offensive-Wireless/Install-YateBTS-on-RPI4/main/yate.service
 
 restart_services () {
-  echo "Restarting Services... \n"
+  echo "Reload Services... \n"
   sudo systemctl daemon-reload
+  echo "Restarting YateBTS... \n"
   sudo systemctl start yate
   sudo systemctl enable yate
+  echo "Restarting Apache... \n"
   sudo systemctl start apache2
   sudo systemctl enable apache2
 }
@@ -119,11 +109,7 @@ cp config.php /usr/local/share/yate/nipc_web/config.php
 ## SIM Cards
 sim_cards () {
   echo "Installing PySIM \n"
-  sudo apt-get install libpcsclite-dev
-  mkdir PySIM
-  cd PySIM/
   git clone git://git.osmocom.org/pysim.git
-  sudo apt-get install python3-pyscard python3-serial python3-pip python3-yaml
   pip3 install -r requirements.txt
   sudo cp -R pysim/ /usr/src/
   cd /usr/local/bin
@@ -148,7 +134,7 @@ bladerf
 #4
 YatesBTS_install
 #5
-configs
+YatesBTS_config
 #6
 setup_b0x
 #7
