@@ -1,4 +1,4 @@
-
+#!/bin/bash
 
 
 
@@ -15,7 +15,7 @@ base_deps () {
   #box
   sudo apt-get -qq install -y apache2 php libusb-1.0-0 libusb-1.0-0-d* libusb-1.0-0-dev libgsm1 libgsm1-dev
   #SIM Cards
-  sudo apt-get install python3-pyscard python3-serial python3-pip python3-yaml
+  sudo apt-get -qq install -y python3-pyscard python3-serial python3-pip python3-yaml
 }
 
 
@@ -141,3 +141,54 @@ setup_b0x
 sim_cards
 #8 last
 restart_services
+
+
+
+function OPTIONS() {    
+banner
+echo -e "
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+| 0.) Install Dependencies                                |
+| 1.) Install YateBTS                                |
+| 2.) Install BladeRF               |     
+| 3.) Install PySIM                   |
+| 4.) Quit                                       |
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#\n"
+
+read -e -p "Select the Choice: " choice
+
+if [ "$choice" == "0" ]; then
+    echo "logging in to the Azure..."
+    base_deps
+ 
+elif [ "$choice" == "1" ]; then
+
+    echo "logging in to non-prod2 evn..."
+    YatesBTS_install
+    echo "logging in to non-prod2 evn..."
+    YatesBTS_config
+
+        
+elif [ "$choice" == "2" ]; then
+
+    echo "Configure YateBTS GUI...\n"
+    setup_b0x
+
+elif [ "$choice" == "3" ]; then
+
+        echo "logging in to prod3 evn..."
+        sim_cards
+        
+elif [ "$choice" == "4" ]; then
+
+    clear && exit 0
+
+else
+
+    echo "Please select 1, 2, 3, or 4." && sleep 3
+    clear && OPTIONS
+
+fi
+}
+
+OPTIONS
