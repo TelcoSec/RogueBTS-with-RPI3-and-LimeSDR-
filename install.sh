@@ -124,26 +124,6 @@ banner () {
 }
 
 
-
-#1
-banner
-#2
-base_deps
-#3
-bladerf
-#4
-YatesBTS_install
-#5
-YatesBTS_config
-#6
-setup_b0x
-#7
-sim_cards
-#8 last
-restart_services
-
-
-
 function OPTIONS() {    
 banner
 echo -e "
