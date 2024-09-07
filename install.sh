@@ -21,8 +21,7 @@ fi
 
 
 
-cp yate.service  /etc/systemd/system/yate.service
-#cp config.php /usr/local/share/yate/nipc_web/config.php
+
 
 ## BladeRF
 
@@ -38,6 +37,7 @@ bladerf () {
   sudo addgroup bladerf
   sudo usermod -a -G bladerf $USER
   make && sudo make install && sudo ldconfig
+  cd $BASE
 }
 
 
@@ -68,6 +68,7 @@ YatesBTS_install () {
   sudo ldconfig
   cd ..
   sudo mkdir -p /usr/share/nuand/bladeRF
+  cd $BASE
 }
 
 
@@ -81,6 +82,9 @@ configs () {
   sudo chown $USER:yate /usr/local/etc/yate/*.conf
   sudo chmod g+w /usr/local/etc/yate/*.conf
   bladeRF-cli -l /usr/src/Nuand/bladeRF/hostedxA9.rbf
+  cp yate.service  /etc/systemd/system/yate.service
+  cp config.php /usr/local/share/yate/nipc_web/config.php
+  cd $BASE
 }
 
 ## NIB0x
@@ -89,6 +93,7 @@ setup_b0x () {
   cd /var/www/html
   sudo ln -s /usr/local/share/yate/nipc_web nipc
   sudo chmod -R a+w /usr/local/share/yate
+  cd $BASE
 }
 
 
@@ -108,7 +113,7 @@ cp config.php /usr/local/share/yate/nipc_web/config.php
 
 
 ## SIM Cards
-function_name () {
+sim_cards () {
   sudo apt-get install libpcsclite-dev
   cd ~
   mkdir PySIM
@@ -120,11 +125,12 @@ function_name () {
   cd /usr/local/bin
   sudo ln -s /usr/src/pysim/pySim-prog.py pySim-prog.py
   sudo vi /usr/local/share/yate/nipc_web/config.php
+  cd $BASE
 }
 
 
 banner () {
-  commands
+  echo """ Install Rogue BTS on RPI4 Ubuntu 22.04 \n"""
 }
 
 
@@ -133,4 +139,15 @@ banner () {
 banner
 #2
 base_deps
-
+#3
+bladerf
+#4
+YatesBTS_install
+#5
+configs
+#6
+setup_b0x
+#7
+sim_cards
+#8 last
+restart_services
