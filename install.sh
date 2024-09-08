@@ -4,6 +4,11 @@
 BOX=$(pwd)
 
 
+
+
+
+
+
 ##Base dependencies
 base_deps () {
   echo "Updating Repos ..."
@@ -36,7 +41,7 @@ bladerf () {
     echo "Group BladeRF does not exist."
     sudo addgroup bladerf
   fi
-  
+  bladeRF-cli -l /usr/src/Nuand/bladeRF/hostedxA9.rbf
   make && sudo make install && sudo ldconfig
   cd $BOX
 }
@@ -79,13 +84,36 @@ YatesBTS_install () {
 YatesBTS_config () {
   echo "Configuring ... \n"
   cd $BOX
-  sudo cp yate.service  /etc/systemd/system/yate.service
-  sudo touch /usr/local/etc/yate/snmp_data.conf /usr/local/etc/yate/tmsidata.conf
-  sudo chown $USER:yate /usr/local/etc/yate/*.conf
-  sudo chmod g+w /usr/local/etc/yate/*.conf
-  bladeRF-cli -l /usr/src/Nuand/bladeRF/hostedxA9.rbf
-  cd $BOX
-  cp config.php /usr/local/share/yate/nipc_web/config.php
+
+
+
+
+  if [ -x /etc/systemd/system/yate.service ]; then
+      echo "Yate Service Already Exists..."
+  else
+      echo "Copying Yate Services data... \n"
+      sudo cp yate.service  /etc/systemd/system/yate.service
+      sudo chown $USER:yate /usr/local/etc/yate/*.conf
+      sudo chmod g+w /usr/local/etc/yate/*.conf
+  fi
+
+  if [ -x /usr/local/etc/yate/snmp_data.conf ]; then
+      echo "snmp_data Already Exists..."
+  else
+      echo "Copying Yate Service to SystemD... \n"
+      sudo touch /usr/local/etc/yate/snmp_data.conf
+  fi
+
+  if [ -x /usr/local/etc/yate/tmsidata.conf ]; then
+      echo "snmp_data Already Exists..."
+  else
+      echo "Copying Yate Service to SystemD... \n"
+      sudo touch /usr/local/etc/yate/tmsidata.conf
+  fi
+
+
+  
+
   echo "Restarting YateBTS... \n"
   sudo systemctl daemon-reload
   sudo systemctl start yate
@@ -109,6 +137,13 @@ setup_b0x () {
       sudo systemctl enable apache
       cd $BOX
   fi
+ if [ -x /usr/local/share/yate/nipc_web/config.php ]; then
+      echo "config Already Exists..."
+  else
+      echo "Copying Yate Service to SystemD... \n"
+      cd $BOX
+      cp config.php /usr/local/share/yate/nipc_web/config.php
+  fi
 
 }
 
@@ -131,8 +166,17 @@ sim_cards () {
 
 
 banner () {
-  echo """ Install Rogue BTS on RPI4 Ubuntu 22.04 \n"""
+  echo -e " Install Rogue BTS on RPI4 Ubuntu 22.04 "
+  echo -e "
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+  | OS: $(uname -a)                                |
+  | Kernel: $(uname -a)                            |
+  | User: $USER                                    |     
+  | Project Folder: $BOX                           |
+  | Author: RFS                                    |
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#\n"
 }
+
 
 
 function OPTIONS() {    
