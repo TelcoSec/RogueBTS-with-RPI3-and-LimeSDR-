@@ -2,13 +2,14 @@
 
 
 
-echo "Updating Repos ...\n"
-apt-get -y -qq update 
-echo "Upgrading System...\n"
-apt-get -y -qq upgrade
+
 
 ##Base dependencies
 base_deps () {
+  echo "Updating Repos ..."
+  apt-get -y -qq update 
+  echo "Upgrading System..."
+  apt-get -y -qq upgrade
   echo "Installing Dependencies..."
   sudo apt-get -qq install -y libusb-1.0-0-dev libusb-1.0-0 build-essential cmake libncurses5-dev libtecla1 libtecla-dev pkg-config git wget doxygen help2man pandoc python-setuptools swig libccid pcscd pcsc-tools libpcsclite1 unzip automake matchbox-keyboard iptables-persistent
   sudo apt -qq install -y libbladerf-dev libpcsclite-dev #python-pyscard
