@@ -69,12 +69,17 @@ YatesBTS_install () {
 ### Configs
 YatesBTS_config () {
   echo "Configuring ... \n"
-  touch /usr/local/etc/yate/snmp_data.conf /usr/local/etc/yate/tmsidata.conf
+  sudo cp yate.service  /etc/systemd/system/yate.service
+  sudo touch /usr/local/etc/yate/snmp_data.conf /usr/local/etc/yate/tmsidata.conf
   sudo chown $USER:yate /usr/local/etc/yate/*.conf
   sudo chmod g+w /usr/local/etc/yate/*.conf
   bladeRF-cli -l /usr/src/Nuand/bladeRF/hostedxA9.rbf
-  cp yate.service  /etc/systemd/system/yate.service
+  
   cp config.php /usr/local/share/yate/nipc_web/config.php
+  echo "Restarting YateBTS... \n"
+  sudo systemctl daemon-reload
+  sudo systemctl start yate
+  sudo systemctl enable yate
   cd $HOME
 }
 
@@ -84,26 +89,13 @@ setup_b0x () {
   cd /var/www/html
   sudo ln -s /usr/local/share/yate/nipc_web nipc
   sudo chmod -R a+w /usr/local/share/yate
+  echo "Restarting Apache... \n"
+  sudo systemctl daemon-reload
+  sudo systemctl start apache2
+  sudo systemctl enable apache
   cd $HOME
 }
 
-
-
-#wget https://raw.githubusercontent.com/Offensive-Wireless/Install-YateBTS-on-RPI4/main/yate.service
-
-restart_services () {
-  echo "Reload Services... \n"
-  sudo systemctl daemon-reload
-  echo "Restarting YateBTS... \n"
-  sudo systemctl start yate
-  sudo systemctl enable yate
-  echo "Restarting Apache... \n"
-  sudo systemctl start apache2
-  sudo systemctl enable apache2
-}
-
-
-cp config.php /usr/local/share/yate/nipc_web/config.php
 
 
 ## SIM Cards
@@ -114,7 +106,7 @@ sim_cards () {
   sudo cp -R pysim/ /usr/src/
   cd /usr/local/bin
   sudo ln -s /usr/src/pysim/pySim-prog.py pySim-prog.py
-  sudo vi /usr/local/share/yate/nipc_web/config.php
+  #sudo vi /usr/local/share/yate/nipc_web/config.php
   cd $HOME
 }
 
@@ -128,24 +120,24 @@ function OPTIONS() {
 banner
 echo -e "
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
-| 0.) Install Dependencies                                |
-| 1.) Install YateBTS                                |
-| 2.) Install BladeRF               |     
-| 3.) Install PySIM                   |
+| 0.) Install Dependencies                       |
+| 1.) Install YateBTS                            |
+| 2.) Install BladeRF                            |     
+| 3.) Install PySIM                              |
 | 4.) Quit                                       |
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#\n"
 
 read -e -p "Select the Choice: " choice
 
 if [ "$choice" == "0" ]; then
-    echo "logging in to the Azure..."
+    echo "Install Dependencies...\n"
     base_deps
  
 elif [ "$choice" == "1" ]; then
 
-    echo "logging in to non-prod2 evn..."
+    echo "Installing YateBTS...\n"
     YatesBTS_install
-    echo "logging in to non-prod2 evn..."
+    echo "Configuring YateBTS...\n"
     YatesBTS_config
 
         
