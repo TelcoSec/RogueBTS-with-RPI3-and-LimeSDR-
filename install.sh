@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-
+BOX=$(pwd)
 
 
 ##Base dependencies
@@ -37,9 +37,8 @@ bladerf () {
     sudo addgroup bladerf
   fi
   
-  sudo usermod -a -G bladerf $USER
   make && sudo make install && sudo ldconfig
-  cd $HOME
+  cd $BOX
 }
 
 
@@ -73,18 +72,19 @@ YatesBTS_install () {
   sudo ldconfig
   cd ..
   sudo mkdir -p /usr/share/nuand/bladeRF
-  cd $HOME
+  cd $BOX
 }
 
 ### Configs
 YatesBTS_config () {
   echo "Configuring ... \n"
+  cd $BOX
   sudo cp yate.service  /etc/systemd/system/yate.service
   sudo touch /usr/local/etc/yate/snmp_data.conf /usr/local/etc/yate/tmsidata.conf
   sudo chown $USER:yate /usr/local/etc/yate/*.conf
   sudo chmod g+w /usr/local/etc/yate/*.conf
   bladeRF-cli -l /usr/src/Nuand/bladeRF/hostedxA9.rbf
-  
+  cd $BOX
   cp config.php /usr/local/share/yate/nipc_web/config.php
   echo "Restarting YateBTS... \n"
   sudo systemctl daemon-reload
@@ -97,13 +97,19 @@ YatesBTS_config () {
 setup_b0x () {
   echo "Setup B0x \n"
   cd /var/www/html
-  sudo ln -s /usr/local/share/yate/nipc_web nipc
-  sudo chmod -R a+w /usr/local/share/yate
-  echo "Restarting Apache... \n"
-  sudo systemctl daemon-reload
-  sudo systemctl start apache2
-  sudo systemctl enable apache
-  cd $HOME
+    if [ -x /usr/local/share/yate/nipc_web ]; then
+      echo "YateBTS GUI Already Installed..."
+  else
+      echo "Installing YateBTS GUI \n"
+      sudo ln -s /usr/local/share/yate/nipc_web nipc
+      sudo chmod -R a+w /usr/local/share/yate
+      echo -e "Restarting Apache... \n"
+      sudo systemctl daemon-reload
+      sudo systemctl start apache2
+      sudo systemctl enable apache
+      cd $BOX
+  fi
+
 }
 
 
@@ -143,14 +149,14 @@ echo -e "
 read -e -p "Select the Choice: " choice
 
 if [ "$choice" == "0" ]; then
-    echo "Install Dependencies...\n"
+    echo -e "Install Dependencies...\n"
     base_deps
  
 elif [ "$choice" == "1" ]; then
 
-    echo "Installing YateBTS...\n"
+    echo -e "Installing YateBTS...\n"
     YatesBTS_install
-    echo "Configuring YateBTS...\n"
+    echo -e "Configuring YateBTS...\n"
     YatesBTS_config
 
         
