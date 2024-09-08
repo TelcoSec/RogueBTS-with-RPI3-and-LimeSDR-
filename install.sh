@@ -93,7 +93,7 @@ YatesBTS_config () {
       echo "Yate Service Already Exists..."
   else
       echo "Copying Yate Services data... \n"
-      sudo cp yate.service  /etc/systemd/system/yate.service
+      sudo cp yate.service  /etc/systemd/system/
       sudo chown $USER:yate /usr/local/etc/yate/*.conf
       sudo chmod g+w /usr/local/etc/yate/*.conf
   fi
@@ -106,7 +106,7 @@ YatesBTS_config () {
   fi
 
   if [ -x /usr/local/etc/yate/tmsidata.conf ]; then
-      echo "snmp_data Already Exists..."
+      echo "tmsidata Already Exists..."
   else
       echo "Copying Yate Service to SystemD... \n"
       sudo touch /usr/local/etc/yate/tmsidata.conf
@@ -134,8 +134,8 @@ setup_b0x () {
       sudo chmod -R a+w /usr/local/share/yate
       echo -e "Restarting Apache... \n"
       sudo systemctl daemon-reload
-      sudo systemctl start apache2
-      sudo systemctl enable apache
+      sudo systemctl restart apache2
+      sudo systemctl enable apache2
       cd $BOX
   fi
  if [ -x /usr/local/share/yate/nipc_web/config.php ]; then
@@ -143,7 +143,7 @@ setup_b0x () {
   else
       echo "Copying Yate Service to SystemD... \n"
       cd $BOX
-      cp config.php /usr/local/share/yate/nipc_web/config.php
+      cp config.php /usr/local/share/yate/nipc_web/
   fi
 
 }
@@ -212,7 +212,7 @@ elif [ "$choice" == "2" ]; then
 
 elif [ "$choice" == "3" ]; then
 
-        echo "logging in to prod3 evn..."
+        echo "Installing PySIM..."
         sim_cards
         
 elif [ "$choice" == "4" ]; then
