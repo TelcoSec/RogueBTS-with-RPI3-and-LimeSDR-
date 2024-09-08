@@ -30,7 +30,13 @@ bladerf () {
   mkdir build
   cd build
   cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/local -DINSTALL_UDEV_RULES=ON ../
-  sudo addgroup bladerf
+  if [ $(getent group bladerf) ]; then
+  echo "BladeRF group exists."
+  else
+    echo "Group BladeRF does not exist."
+    sudo addgroup bladerf
+  fi
+  
   sudo usermod -a -G bladerf $USER
   make && sudo make install && sudo ldconfig
   cd $HOME
@@ -40,10 +46,13 @@ bladerf () {
 # YatesBTS Install
 YatesBTS_install () {
   echo "Installing YateBTS..."
-  sudo addgroup yate
-  sudo usermod -a -G yate $USER
-  mkdir YateBTS
-  cd YateBTS
+  if [ $(getent group yate) ]; then
+  echo "Yate group exists."
+  else
+    echo "Group Yate does not exist."
+    sudo addgroup yate
+    sudo usermod -a -G yate $USER
+  fi
   #wget https://nuand.com/downloads/yate-rc-3.tar.gz
   tar xvf yate-rc-3.tar.gz
   sudo mv yate /usr/src
@@ -101,14 +110,17 @@ setup_b0x () {
 
 ## SIM Cards
 sim_cards () {
-  echo "Installing PySIM \n"
-  git clone git://git.osmocom.org/pysim.git
-  pip3 install -r requirements.txt
-  sudo cp -R pysim/ /usr/src/
-  cd /usr/local/bin
-  sudo ln -s /usr/src/pysim/pySim-prog.py pySim-prog.py
-  #sudo vi /usr/local/share/yate/nipc_web/config.php
-  cd $HOME
+  if [ -x /usr/src/pysim/pySim-prog.py ]; then
+      echo "PySIM Already Installed..."
+  else
+      echo "Installing PySIM \n"
+      git clone git://git.osmocom.org/pysim.git
+      pip3 install -r requirements.txt
+      sudo cp -R pysim/ /usr/src/
+      cd /usr/local/bin
+      sudo ln -s /usr/src/pysim/pySim-prog.py pySim-prog.py
+  fi
+
 }
 
 
