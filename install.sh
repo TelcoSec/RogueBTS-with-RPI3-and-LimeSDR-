@@ -166,7 +166,7 @@ banner () {
   echo -e "
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
   | OS: $(uname)                                   |
-  | Kernel: $(uname -a)                            |
+  | Kernel: $(uname -n)                            |
   | User: $USER                                    |     
   | Project Folder: $BOX                           |
   | Author: RFS                                    |
