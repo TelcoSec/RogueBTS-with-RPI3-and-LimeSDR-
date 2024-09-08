@@ -179,17 +179,18 @@ function OPTIONS() {
 banner
 echo -e "
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
-| 0.) Install Dependencies                       |
-| 1.) Install YateBTS                            |
-| 2.) Install BladeRF                            |     
-| 3.) Install PySIM                              |
-| 4.) Quit                                       |
+| 0.) System preparation                         |
+| 1.) Install YateBTS (2G)                       |
+| 2.) Install srsLTE eNB (4G)                    |
+| 3.) Install BladeRF - Radio                    |     
+| 4.) Install PySIM - SIM Cards                  |
+| 5.) Quit                                       |
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#\n"
 
 read -e -p "Select the Choice: " choice
 
 if [ "$choice" == "0" ]; then
-    echo -e "Install Dependencies...\n"
+    echo -e "System preparation...\n"
     base_deps
  
 elif [ "$choice" == "1" ]; then
@@ -202,15 +203,20 @@ elif [ "$choice" == "1" ]; then
         
 elif [ "$choice" == "2" ]; then
 
-    echo "Configure YateBTS GUI...\n"
-    setup_b0x
+    echo -e "Installing srsLTE eNB...\n"
 
 elif [ "$choice" == "3" ]; then
+
+    echo -e "Installing BladeRF ...\n"
+    bladerf
+
+
+elif [ "$choice" == "4" ]; then
 
         echo "Installing PySIM..."
         sim_cards
         
-elif [ "$choice" == "4" ]; then
+elif [ "$choice" == "5" ]; then
 
     clear && exit 0
 
