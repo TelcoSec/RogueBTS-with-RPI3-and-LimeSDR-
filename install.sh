@@ -58,6 +58,7 @@ YatesBTS_install () {
     sudo usermod -a -G yate $USER
   fi
   #wget https://nuand.com/downloads/yate-rc-3.tar.gz
+  cd $BOX
   tar xvf yate-rc-3.tar.gz
   sudo mv yate /usr/src
   sudo mv yatebts /usr/src
@@ -169,7 +170,7 @@ banner () {
   echo -e " Install Rogue BTS on RPI4 Ubuntu 22.04 "
   echo -e "
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
-  | OS: $(uname -a)                                |
+  | OS: $(uname)                                   |
   | Kernel: $(uname -a)                            |
   | User: $USER                                    |     
   | Project Folder: $BOX                           |
