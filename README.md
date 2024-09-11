@@ -21,3 +21,8 @@
 - chmod 777 install.sh
 - sudo ./install.sh
 
+## Configuration
+
+- MCC 
+- MNC
+- SIM Cards provisioning
