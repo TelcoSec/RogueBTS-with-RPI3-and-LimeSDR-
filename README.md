@@ -5,8 +5,8 @@
 
 ## Hardware
 
-- BladeRF
-- RPI4
+- LimeSDR / BladeRF
+- RPI3 / RPI4
 - GSM Phone
 - Magic SIM Or OsmoSIM
 
