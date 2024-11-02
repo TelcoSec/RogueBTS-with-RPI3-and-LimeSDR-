@@ -17,6 +17,13 @@ base_deps () {
   sudo apt-get -qq install -y apache2 php libusb-1.0-0 libusb-1.0-0-d* libusb-1.0-0-dev libgsm1 libgsm1-dev
   #SIM Cards
   sudo apt-get -qq install -y python3-pyscard python3-serial python3-pip python3-yaml
+  sudo apt install -y git vim curl python-is-python3 autoconf libtool libosmocore  
+  sudo apt-get install -y libusb-1.0-0-dev libboost-dev g++ cmake libsqlite3-dev
+  sudo apt-get install -y libuhd-dev uhd-host liburing* libpcsclite* gnutls* libortp-dev libosmo-sccp*  libdbi* htop libedit* libxml2-dev asterisk
+  sudo apt-get install -y libsoapysdr-dev libi2c-dev libusb-1.0-0-dev ibwxgtk* freeglut3-dev gnuplot libghc-tls* libmnl-dev libsctp-dev
+  sudo apt install -y libpcsclite-dev libtalloc-dev libortp-dev libsctp-dev libmnl-dev libdbi-dev libdbd-sqlite3 libsqlite3-dev sqlite3 libc-ares-dev libxml2-dev libssl-dev
+  sudo apt install libdbi-dev libdbd-sqlite3 libortp-dev build-essential libtool autoconf autoconf-archive automake git-core pkg-config libtalloc-dev libpcsclite-dev libpcap-dev
+
 }
 
 ## LimeSDR
