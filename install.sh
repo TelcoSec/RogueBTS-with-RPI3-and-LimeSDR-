@@ -23,7 +23,7 @@ base_deps () {
   sudo apt-get install -y libsoapysdr-dev libi2c-dev libusb-1.0-0-dev ibwxgtk* freeglut3-dev gnuplot libghc-tls* libmnl-dev libsctp-dev
   sudo apt install -y libpcsclite-dev libtalloc-dev libortp-dev libsctp-dev libmnl-dev libdbi-dev libdbd-sqlite3 libsqlite3-dev sqlite3 libc-ares-dev libxml2-dev libssl-dev
   sudo apt install libdbi-dev libdbd-sqlite3 libortp-dev build-essential libtool autoconf autoconf-archive automake git-core pkg-config libtalloc-dev libpcsclite-dev libpcap-dev
-
+  sudo apt-get install raspi-config
 }
 
 ## LimeSDR
