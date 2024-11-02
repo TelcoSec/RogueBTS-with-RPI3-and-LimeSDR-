@@ -19,6 +19,24 @@ base_deps () {
   sudo apt-get -qq install -y python3-pyscard python3-serial python3-pip python3-yaml
 }
 
+## LimeSDR
+
+limesdr()
+{
+  ## LimeSuite
+git clone https://github.com/myriadrf/LimeSuite.git
+cd LimeSuite
+mkdir buildir && cd buildir
+cmake ../
+make -j4
+sudo make install
+sudo ldconfig
+cd ..
+cd  udev-rules
+sudo sh ./install.sh
+cd ../..
+}
+
 
 ## BladeRF
 bladerf () {
@@ -182,9 +200,10 @@ echo -e "
 | 0.) System preparation                         |
 | 1.) Install YateBTS (2G)                       |
 | 2.) Install srsLTE eNB (4G)                    |
-| 3.) Install BladeRF - Radio                    |     
-| 4.) Install PySIM - SIM Cards                  |
-| 5.) Quit                                       |
+| 3.) Install BladeRF - Radio                    | 
+| 4.) Install LimeSDR - Radio                    |     
+| 5.) Install PySIM - SIM Cards                  |
+| 6.) Quit                                       |
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#\n"
 
 read -e -p "Select the Choice: " choice
@@ -210,19 +229,23 @@ elif [ "$choice" == "3" ]; then
     echo -e "Installing BladeRF ...\n"
     bladerf
 
-
 elif [ "$choice" == "4" ]; then
+
+    echo -e "Installing LimeSDR ...\n"
+    limesdr
+
+elif [ "$choice" == "5" ]; then
 
         echo "Installing PySIM..."
         sim_cards
         
-elif [ "$choice" == "5" ]; then
+elif [ "$choice" == "6" ]; then
 
     clear && exit 0
 
 else
 
-    echo "Please select 1, 2, 3, or 4." && sleep 3
+    echo "Please select 1, 2, 3,4 ,5 or 6." && sleep 3
     clear && OPTIONS
 
 fi
