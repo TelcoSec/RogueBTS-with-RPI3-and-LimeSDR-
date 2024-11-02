@@ -1,6 +1,8 @@
 # Rogue BTS
 
-
+The content provided here is intended for educational and research purposes only. \
+It is not intended to provide professional advice or guidance. \
+The author is not responsible for any misuse of the information provided.
 
 
 ## Hardware
