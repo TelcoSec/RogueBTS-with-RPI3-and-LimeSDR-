@@ -20,6 +20,8 @@ The author is not responsible for any misuse of the information provided.
 ![image](https://github.com/user-attachments/assets/29e580f3-c7ea-4c6a-87b9-b0bd59a1325e)
 
 
+- Status: In Dev - DO NOT USE  
+
 - git clone https://github.com/TelcoSec/RogueBTS.git
 - cd Install-YateBTS-on-RPI4/
 - chmod 777 install.sh
