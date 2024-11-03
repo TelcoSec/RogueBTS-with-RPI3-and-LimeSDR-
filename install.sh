@@ -195,6 +195,7 @@ banner () {
   | User: $USER                                    |     
   | Project Folder: $BOX                           |
   | Author: RFS                                    |
+  | Status: In Dev - DO NOT USE                    |
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#\n"
 }
 
